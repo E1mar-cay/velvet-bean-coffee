@@ -1,0 +1,795 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0">
+  <title>Velvet & Bean — Artisanal Cafe Ordering</title>
+  <meta name="description" content="Artisanal coffee and beverage ordering platform with mobile-first responsive design, interactive drink customizer, checkout, and live order tracking.">
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Outfit:wght@400;500;600;700;800&family=Plus+Jakarta+Sans:wght@400;500;600;700&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="styles.css">
+</head>
+<body class="desktop-mode">
+
+  <!-- Top Global Header / Navigation Bar -->
+  <header class="site-header" id="siteHeader">
+    <div class="header-inner container">
+      
+      <!-- Brand Logo -->
+      <div class="brand-group">
+        <a href="#" class="brand-logo" id="brandLogoHome">
+          <span class="brand-icon">☕</span>
+          <div class="brand-text">
+            <span class="brand-name">Velvet &amp; Bean</span>
+            <span class="brand-tagline">Artisanal Roastery &bull; Manila</span>
+          </div>
+        </a>
+      </div>
+
+      <!-- Desktop Search Bar -->
+      <div class="desktop-search-wrap">
+        <div class="search-box">
+          <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="11" cy="11" r="8"/><line x1="21" y1="21" x2="16.65" y2="16.65"/></svg>
+          <input type="text" id="searchInput" placeholder="Search Spanish latte, caramel macchiato, cold foam..." autocomplete="off">
+        </div>
+      </div>
+
+      <!-- Fulfillment Mode Switcher -->
+      <div class="fulfillment-badge" id="fulfillmentHeaderBadge">
+        <div class="fulfillment-dot"></div>
+        <div class="fulfillment-text">
+          <span class="ful-type" id="hdrFulfillType">Express Delivery</span>
+          <span class="ful-eta" id="hdrFulfillEta">Est. 15-25 mins</span>
+        </div>
+      </div>
+
+      <!-- Desktop Navigation Links & Action Controls -->
+      <nav class="desktop-nav-links">
+        <button class="nav-link active" data-flow="menu" id="pcNavMenu">Menu</button>
+        <button class="nav-link" data-flow="checkout" id="pcNavCheckout">
+          Checkout
+          <span class="nav-cart-badge" id="navCartBadge">1</span>
+        </button>
+        <button class="nav-link" data-flow="tracker" id="pcNavTracker">Live Tracker</button>
+      </nav>
+
+      <!-- Utility Actions (View Mode Switcher + Report Button) -->
+      <div class="header-actions">
+        <!-- View Toggle (PC View vs Simulated Mobile Phone) -->
+        <button class="view-toggle-btn" id="btnToggleDeviceMode" title="Toggle between PC View and Simulated Mobile Phone View">
+          <span class="toggle-icon" id="toggleModeIcon">📱</span>
+          <span class="toggle-label" id="toggleModeLabel">Phone View</span>
+        </button>
+
+        <!-- Academic Design Report Modal Trigger -->
+        <button class="btn-report-trigger" id="btnOpenReport">
+          <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"/><polyline points="14 2 14 8 20 8"/><line x1="16" y1="13" x2="8" y2="13"/><line x1="16" y1="17" x2="8" y2="17"/></svg>
+          <span>Design Report</span>
+        </button>
+      </div>
+
+    </div>
+  </header>
+
+  <!-- Mobile Quick Search & Status Bar (Visible on mobile screens) -->
+  <div class="mobile-subbar">
+    <div class="mobile-search-row">
+      <div class="search-box">
+        <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="11" cy="11" r="8"/><line x1="21" y1="21" x2="16.65" y2="16.65"/></svg>
+        <input type="text" id="mobileSearchInput" placeholder="Search coffee, drinks, treats..." autocomplete="off">
+      </div>
+      <button class="mobile-fulfillment-pill" id="btnMobileFulfillment">
+        <span class="pulse-dot"></span>
+        <span id="mobileFulfillText">Delivery (₱49)</span>
+      </button>
+    </div>
+  </div>
+
+  <!-- Main Application Wrapper -->
+  <div class="app-viewport-wrapper" id="appViewportWrapper">
+    <main class="main-content-canvas container">
+
+      <!-- ================= SCREEN 1: MENU & DISCOVERY ================= -->
+      <section class="flow-screen active" id="screenMenu" data-screen-id="menu">
+        
+        <!-- PC & Mobile Layout Grid -->
+        <div class="menu-layout-grid">
+          
+          <!-- Primary Menu Column -->
+          <div class="menu-primary-col">
+            
+            <!-- Hero Featured Banner -->
+            <div class="hero-banner-card" id="heroBannerCard" data-drink-id="caramel-macchiato">
+              <div class="hero-text-wrap">
+                <span class="hero-pill">✨ Featured Artisanal Blend</span>
+                <h1 class="hero-title">Iced Caramel Macchiato</h1>
+                <p class="hero-desc">Single-origin espresso layered over fresh vanilla whole milk, capped with golden amber caramel drizzle and sea-salt flakes.</p>
+                <div class="hero-footer-row">
+                  <div class="hero-price-tag">
+                    <span class="price-currency">₱</span>
+                    <span class="price-val">185.00</span>
+                  </div>
+                  <button class="hero-cta-btn" id="btnHeroCustomize">
+                    Customize Drink
+                    <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><polyline points="9 18 15 12 9 6"/></svg>
+                  </button>
+                </div>
+              </div>
+              <div class="hero-image-wrap">
+                <img src="assets/caramel_macchiato.jpg" alt="Iced Caramel Macchiato" class="hero-img">
+              </div>
+            </div>
+
+            <!-- Category Selector Tabs -->
+            <div class="categories-container">
+              <div class="category-scroll" id="categoryTabs">
+                <button class="cat-pill active" data-category="all">All Specials</button>
+                <button class="cat-pill" data-category="espresso">Signature Espresso</button>
+                <button class="cat-pill" data-category="cold">Cold Brews</button>
+                <button class="cat-pill" data-category="tea">Matcha &amp; Teas</button>
+                <button class="cat-pill" data-category="pastries">Pastries</button>
+              </div>
+            </div>
+
+            <!-- Menu Grid Section -->
+            <div class="menu-grid-header">
+              <div class="section-title-wrap">
+                <h2 class="section-title">Artisan Handcrafted Menu</h2>
+                <span class="section-badge" id="menuCountBadge">4 Beverages</span>
+              </div>
+              <div class="desktop-fulfillment-toggle">
+                <button class="mode-btn active" id="modeBtnDelivery">🛵 Delivery</button>
+                <button class="mode-btn" id="modeBtnPickup">☕ Store Pickup</button>
+              </div>
+            </div>
+
+            <!-- Responsive Drinks Grid (2 cols on mobile, 3-4 cols on PC) -->
+            <div class="drinks-grid" id="drinksGrid">
+              <!-- Dynamically populated by JS with Peso prices -->
+            </div>
+
+          </div> <!-- /menu-primary-col -->
+
+          <!-- Desktop Sticky Order Sidebar (Shown on PC view for seamless desktop UX) -->
+          <aside class="desktop-order-sidebar" id="desktopOrderSidebar">
+            <div class="sidebar-sticky-inner">
+              
+              <div class="sidebar-header">
+                <div class="sidebar-title-row">
+                  <h3 class="sidebar-title">Current Order</h3>
+                  <span class="sidebar-item-count" id="sidebarBadgeCount">1 item</span>
+                </div>
+                <div class="sidebar-loc-row">
+                  <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M21 10c0 7-9 13-9 13s-9-6-9-13a9 9 0 0 1 18 0z"/><circle cx="12" cy="10" r="3"/></svg>
+                  <span>BGC High Street, Taguig City</span>
+                </div>
+              </div>
+
+              <!-- Sidebar Items List -->
+              <div class="sidebar-items-list" id="sidebarItemsList">
+                <!-- Dynamically populated by JS -->
+              </div>
+
+              <!-- Sidebar Price Breakdown -->
+              <div class="sidebar-bill-summary">
+                <div class="summary-line">
+                  <span>Subtotal</span>
+                  <span id="sidebarSubtotal">₱245.00</span>
+                </div>
+                <div class="summary-line">
+                  <span>Delivery Fee</span>
+                  <span id="sidebarDelivery">₱49.00</span>
+                </div>
+                <div class="summary-line">
+                  <span>Barista Tip</span>
+                  <span id="sidebarTip">₱30.00</span>
+                </div>
+                <div class="summary-divider"></div>
+                <div class="summary-line total-line">
+                  <span>Total Amount</span>
+                  <span class="summary-total-val" id="sidebarTotal">₱324.00</span>
+                </div>
+              </div>
+
+              <!-- Sidebar Checkout CTA -->
+              <button class="sidebar-checkout-btn" id="btnSidebarCheckout">
+                <span>Proceed to Checkout</span>
+                <span class="btn-arrow">&rarr;</span>
+              </button>
+
+            </div>
+          </aside>
+
+        </div> <!-- /menu-layout-grid -->
+
+      </section>
+
+
+      <!-- ================= SCREEN 3: CHECKOUT & PAYMENT ================= -->
+      <section class="flow-screen" id="screenCheckout" data-screen-id="checkout">
+        
+        <div class="checkout-page-container">
+          
+          <!-- Back Header Navigation -->
+          <div class="flow-page-header">
+            <button class="back-link-btn" id="btnBackToMenu">
+              <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><polyline points="15 18 9 12 15 6"/></svg>
+              <span>Back to Menu</span>
+            </button>
+            <h2 class="flow-page-title">Review &amp; Checkout</h2>
+            <div class="flow-header-spacer"></div>
+          </div>
+
+          <!-- Responsive 2-Column Checkout Layout for PC (collapses on mobile) -->
+          <div class="checkout-grid-layout">
+            
+            <!-- Left Column: Delivery & Payment Details -->
+            <div class="checkout-main-form">
+              
+              <!-- Delivery Address Card -->
+              <div class="content-box">
+                <div class="box-title-row">
+                  <h3 class="box-title">Fulfillment Details</h3>
+                  <span class="box-tag">Standard Delivery</span>
+                </div>
+                
+                <div class="address-preview-row">
+                  <div class="address-pin-icon">📍</div>
+                  <div class="address-info-text">
+                    <strong class="address-name">Bonifacio Global City</strong>
+                    <p class="address-street">Unit 14B, One Serendra, 26th St, Taguig City, Metro Manila</p>
+                    <span class="address-eta">⏱ Estimated arrival: 18–25 mins</span>
+                  </div>
+                  <button class="text-action-btn" id="btnEditAddress">Change</button>
+                </div>
+              </div>
+
+              <!-- Barista Tip Options -->
+              <div class="content-box">
+                <div class="box-title-row">
+                  <h3 class="box-title">Tip the Barista ❤️</h3>
+                  <span class="box-sub">100% directly supports our local craft team</span>
+                </div>
+                
+                <div class="tip-pills-row" id="tipOptions">
+                  <button class="tip-chip" data-tip="0">None</button>
+                  <button class="tip-chip" data-tip="20">₱20</button>
+                  <button class="tip-chip active" data-tip="30">₱30</button>
+                  <button class="tip-chip" data-tip="50">₱50</button>
+                  <button class="tip-chip" data-tip="custom">Custom</button>
+                </div>
+              </div>
+
+              <!-- Payment Method Selection -->
+              <div class="content-box">
+                <div class="box-title-row">
+                  <h3 class="box-title">Select Payment Method</h3>
+                  <span class="box-tag secure-tag">🔒 Bangko Sentral Regulated</span>
+                </div>
+
+                <div class="payment-methods-stack" id="paymentMethodsStack">
+                  <label class="payment-card-opt active">
+                    <input type="radio" name="payment" value="gcash" checked>
+                    <div class="pay-icon-box gcash-box">GCash</div>
+                    <div class="pay-meta">
+                      <strong class="pay-title">GCash e-Wallet</strong>
+                      <span class="pay-desc">0917 ••• •492 (Fast 1-tap checkout)</span>
+                    </div>
+                    <div class="custom-radio"></div>
+                  </label>
+
+                  <label class="payment-card-opt">
+                    <input type="radio" name="payment" value="maya">
+                    <div class="pay-icon-box maya-box">Maya</div>
+                    <div class="pay-meta">
+                      <strong class="pay-title">Maya Wallet / QR Ph</strong>
+                      <span class="pay-desc">Instant payment transfer</span>
+                    </div>
+                    <div class="custom-radio"></div>
+                  </label>
+
+                  <label class="payment-card-opt">
+                    <input type="radio" name="payment" value="card">
+                    <div class="pay-icon-box card-box">💳</div>
+                    <div class="pay-meta">
+                      <strong class="pay-title">Debit / Credit Card</strong>
+                      <span class="pay-desc">Visa / Mastercard ending in ••88</span>
+                    </div>
+                    <div class="custom-radio"></div>
+                  </label>
+                </div>
+              </div>
+
+            </div> <!-- /checkout-main-form -->
+
+            <!-- Right Column: Order Items & Bill Breakdown -->
+            <div class="checkout-summary-col">
+              
+              <div class="content-box sticky-summary-card">
+                <div class="box-title-row">
+                  <h3 class="box-title">Order Items</h3>
+                  <button class="text-action-btn" id="btnAddMoreItems">+ Add more</button>
+                </div>
+
+                <!-- Order items container -->
+                <div class="checkout-items-list" id="checkoutItemsList">
+                  <!-- Populated by JS -->
+                </div>
+
+                <div class="summary-divider"></div>
+
+                <!-- Bill breakdown in Pesos -->
+                <div class="bill-breakdown">
+                  <div class="bill-line">
+                    <span>Subtotal</span>
+                    <span id="billSubtotal">₱245.00</span>
+                  </div>
+                  <div class="bill-line">
+                    <span>Delivery Fee</span>
+                    <span id="billDelivery">₱49.00</span>
+                  </div>
+                  <div class="bill-line">
+                    <span>Barista Tip</span>
+                    <span id="billTip">₱30.00</span>
+                  </div>
+                  <div class="summary-divider"></div>
+                  <div class="bill-line grand-total-line">
+                    <span>Total Amount</span>
+                    <span class="grand-total-amount" id="billTotal">₱324.00</span>
+                  </div>
+                </div>
+
+                <!-- Confirm & Pay Button -->
+                <button class="btn-confirm-order" id="btnPlaceOrder">
+                  <span class="order-spinner" id="placeOrderSpinner"></span>
+                  <span class="order-btn-text" id="placeOrderText">Confirm Order &bull; ₱324.00</span>
+                </button>
+
+              </div>
+
+            </div> <!-- /checkout-summary-col -->
+
+          </div> <!-- /checkout-grid-layout -->
+
+        </div> <!-- /checkout-page-container -->
+
+      </section>
+
+
+      <!-- ================= SCREEN 4: LIVE ORDER TRACKING ================= -->
+      <section class="flow-screen" id="screenTracker" data-screen-id="tracker">
+        
+        <div class="tracker-page-container">
+          
+          <div class="flow-page-header">
+            <button class="back-link-btn" id="btnTrackerToMenu">
+              <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><polyline points="15 18 9 12 15 6"/></svg>
+              <span>Back to Menu</span>
+            </button>
+            <h2 class="flow-page-title">Live Order Status</h2>
+            <button class="support-btn" id="btnHelp" aria-label="Order Help">Support</button>
+          </div>
+
+          <!-- Responsive 2-Column Grid on PC -->
+          <div class="tracker-grid-layout">
+            
+            <!-- Left Column: Animated Status & Timeline Milestones -->
+            <div class="tracker-main-col">
+              
+              <!-- Radar Hero Card -->
+              <div class="status-radar-hero">
+                <div class="radar-pulse-stage">
+                  <div class="radar-wave wave-1"></div>
+                  <div class="radar-wave wave-2"></div>
+                  <div class="radar-wave wave-3"></div>
+                  <div class="radar-center-hub">
+                    <span class="hub-icon" id="hubEmoji">☕</span>
+                  </div>
+                </div>
+
+                <div class="countdown-block">
+                  <span class="countdown-eyebrow">ESTIMATED DELIVERY ARRIVAL</span>
+                  <div class="countdown-time" id="countdownClock">14:30</div>
+                  <div class="status-badge-live" id="trackerStatusTag">Step 2 of 4 &bull; Handcrafting Your Beverage</div>
+                </div>
+
+                <!-- Animated Progress Bar -->
+                <div class="progress-bar-bg">
+                  <div class="progress-bar-fill" id="progressFill" style="width: 48%;"></div>
+                </div>
+              </div>
+
+              <!-- Milestones Timeline Card -->
+              <div class="content-box">
+                <h3 class="box-title">Order Milestones</h3>
+
+                <div class="timeline-steps-list" id="timelineSteps">
+                  
+                  <div class="milestone-item completed">
+                    <div class="milestone-marker">
+                      <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3"><polyline points="20 6 9 17 4 12"/></svg>
+                    </div>
+                    <div class="milestone-details">
+                      <div class="milestone-title">Order Accepted &bull; #VB-9824</div>
+                      <div class="milestone-desc">Velvet &amp; Bean Roastery accepted your request</div>
+                      <span class="milestone-time">9:41 AM</span>
+                    </div>
+                  </div>
+
+                  <div class="milestone-item active">
+                    <div class="milestone-marker pulse">
+                      <span class="active-pulse-core"></span>
+                    </div>
+                    <div class="milestone-details">
+                      <div class="milestone-title">Pulling Espresso Shots &amp; Steaming Foam</div>
+                      <div class="milestone-desc">Barista Marco is crafting your beverage to exact specifications</div>
+                      <span class="milestone-time live">In progress</span>
+                    </div>
+                  </div>
+
+                  <div class="milestone-item pending">
+                    <div class="milestone-marker"></div>
+                    <div class="milestone-details">
+                      <div class="milestone-title">Courier On the Way</div>
+                      <div class="milestone-desc">Handed over to rider &bull; Honda ADV 160</div>
+                      <span class="milestone-time">Est. 9:55 AM</span>
+                    </div>
+                  </div>
+
+                  <div class="milestone-item pending">
+                    <div class="milestone-marker"></div>
+                    <div class="milestone-details">
+                      <div class="milestone-title">Delivered at Doorstep</div>
+                      <div class="milestone-desc">Unit 14B, One Serendra, BGC, Taguig</div>
+                      <span class="milestone-time">Est. 10:05 AM</span>
+                    </div>
+                  </div>
+
+                </div>
+              </div>
+
+            </div> <!-- /tracker-main-col -->
+
+            <!-- Right Column: Barista/Courier Profile & Order Receipt -->
+            <div class="tracker-side-col">
+              
+              <!-- Courier / Barista Card -->
+              <div class="content-box profile-contact-card">
+                <div class="profile-avatar-wrap">
+                  <div class="profile-avatar">MC</div>
+                  <div class="status-online-dot"></div>
+                </div>
+                <div class="profile-info">
+                  <strong class="profile-name">Marco Castillo</strong>
+                  <span class="profile-role">Lead Barista &bull; Q-Grader Certified</span>
+                  <div class="profile-rating">⭐ 4.96 (1,480+ drinks crafted)</div>
+                </div>
+                <div class="profile-actions">
+                  <button class="circle-action-btn" id="btnCallBarista" title="Call store">
+                    <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M22 16.92v3a2 2 0 0 1-2.18 2 19.79 19.79 0 0 1-8.63-3.07 19.5 19.5 0 0 1-6-6 19.79 19.79 0 0 1-3.07-8.67A2 2 0 0 1 4.11 2h3a2 2 0 0 1 2 1.72 12.84 12.84 0 0 0 .7 2.81 2 2 0 0 1-.45 2.11L8.09 9.91a16 16 0 0 0 6 6l1.27-1.27a2 2 0 0 1 2.11-.45 12.84 12.84 0 0 0 2.81.7A2 2 0 0 1 22 16.92z"/></svg>
+                  </button>
+                  <button class="circle-action-btn" id="btnMsgBarista" title="Message store">
+                    <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M21 15a2 2 0 0 1-2 2H7l-4 4V5a2 2 0 0 1 2-2h14a2 2 0 0 1 2 2z"/></svg>
+                  </button>
+                </div>
+              </div>
+
+              <!-- Order Receipt Summary -->
+              <div class="content-box">
+                <div class="box-title-row">
+                  <h3 class="box-title">Order Receipt Summary</h3>
+                  <span class="box-tag" id="trackerItemQty">1 item</span>
+                </div>
+                
+                <div class="tracker-receipt-items" id="trackerItemsPreview">
+                  <!-- Populated by JS -->
+                </div>
+
+                <div class="summary-divider"></div>
+
+                <div class="receipt-paid-row">
+                  <span>Paid with GCash</span>
+                  <span class="paid-amount" id="trackerTotalPaid">₱324.00</span>
+                </div>
+              </div>
+
+              <!-- Order Again Button -->
+              <button class="btn-order-again" id="btnOrderAgain">
+                <span>Start Another Order &bull; Explore Menu</span>
+                <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2"><path d="M3 12a9 9 0 0 1 9-9 9.75 9.75 0 0 1 6.74 2.74L21 8"/><polyline points="21 3 21 8 16 8"/><path d="M21 12a9 9 0 0 1-9 9 9.75 9.75 0 0 1-6.74-2.74L3 16"/><polyline points="3 21 3 16 8 16"/></svg>
+              </button>
+
+            </div> <!-- /tracker-side-col -->
+
+          </div> <!-- /tracker-grid-layout -->
+
+        </div> <!-- /tracker-page-container -->
+
+      </section>
+
+    </main>
+  </div> <!-- /app-viewport-wrapper -->
+
+
+  <!-- ================= SCREEN 2: DRINK CUSTOMIZER MODAL ================= -->
+  <!-- On mobile: smooth bottom sheet. On PC: centered responsive modal dialog -->
+  <div class="customizer-modal-overlay" id="customizerBackdrop" aria-hidden="true">
+    <div class="customizer-dialog" id="customizerSheet" role="dialog" aria-modal="true" aria-labelledby="modalDrinkTitle">
+      
+      <!-- Mobile Drag Handle Bar -->
+      <div class="modal-handle-bar">
+        <div class="handle-pill"></div>
+      </div>
+
+      <!-- Modal Header -->
+      <div class="modal-header">
+        <div class="modal-drink-preview">
+          <img src="assets/caramel_macchiato.jpg" alt="Selected Drink" class="modal-thumb" id="modalDrinkImg">
+          <div class="modal-title-meta">
+            <span class="modal-badge" id="modalDrinkBadge">Signature Craft</span>
+            <h3 class="modal-drink-name" id="modalDrinkTitle">Iced Caramel Macchiato</h3>
+            <div class="modal-base-price" id="modalDrinkBasePrice">Base: ₱185.00</div>
+          </div>
+        </div>
+        <button class="modal-close-btn" id="btnCloseCustomizer" aria-label="Close modal">
+          <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><line x1="18" y1="6" x2="6" y2="18"/><line x1="6" y1="6" x2="18" y2="18"/></svg>
+        </button>
+      </div>
+
+      <!-- Modal Scrollable Content -->
+      <div class="modal-scroll-body" id="customizerForm">
+        
+        <!-- 1. Cup Size -->
+        <div class="cust-section">
+          <div class="cust-header-row">
+            <label class="cust-title">Cup Size</label>
+            <span class="cust-badge-req">Required &bull; Pick 1</span>
+          </div>
+          <div class="size-options-grid">
+            <label class="size-option-card">
+              <input type="radio" name="custSize" value="Small" data-price="0">
+              <div class="size-card-body">
+                <span class="size-icon">☕</span>
+                <span class="size-label">Small</span>
+                <span class="size-oz">12 oz</span>
+                <span class="size-price">+₱0</span>
+              </div>
+            </label>
+            <label class="size-option-card active">
+              <input type="radio" name="custSize" value="Medium" data-price="20" checked>
+              <div class="size-card-body">
+                <span class="size-icon">☕</span>
+                <span class="size-label">Medium</span>
+                <span class="size-oz">16 oz</span>
+                <span class="size-price">+₱20</span>
+              </div>
+            </label>
+            <label class="size-option-card">
+              <input type="radio" name="custSize" value="Large" data-price="35">
+              <div class="size-card-body">
+                <span class="size-icon">☕</span>
+                <span class="size-label">Large</span>
+                <span class="size-oz">24 oz</span>
+                <span class="size-price">+₱35</span>
+              </div>
+            </label>
+          </div>
+        </div>
+
+        <!-- 2. Milk Options -->
+        <div class="cust-section">
+          <div class="cust-header-row">
+            <label class="cust-title">Milk / Dairy Alternative</label>
+            <span class="cust-note">Specialty textured</span>
+          </div>
+          <div class="pills-grid" id="milkOptions">
+            <button type="button" class="opt-pill active" data-milk="Oat Milk" data-price="30">Oat Milk (+₱30)</button>
+            <button type="button" class="opt-pill" data-milk="Whole Milk" data-price="0">Whole Milk (+₱0)</button>
+            <button type="button" class="opt-pill" data-milk="Almond Milk" data-price="30">Almond (+₱30)</button>
+            <button type="button" class="opt-pill" data-milk="Breve Cream" data-price="35">Breve Cream (+₱35)</button>
+          </div>
+        </div>
+
+        <!-- 3. Sweetness Level -->
+        <div class="cust-section">
+          <div class="cust-header-row">
+            <label class="cust-title">Sweetness Level</label>
+            <span class="cust-note" id="sweetnessLabel">50% &bull; Semi Sweet</span>
+          </div>
+          <div class="pills-grid" id="sweetnessOptions">
+            <button type="button" class="opt-pill" data-sweetness="0%">0% Unsweetened</button>
+            <button type="button" class="opt-pill active" data-sweetness="50%">50% Semi Sweet</button>
+            <button type="button" class="opt-pill" data-sweetness="75%">75% Less Sweet</button>
+            <button type="button" class="opt-pill" data-sweetness="100%">100% Standard</button>
+          </div>
+        </div>
+
+        <!-- 4. Ice Level -->
+        <div class="cust-section">
+          <div class="cust-header-row">
+            <label class="cust-title">Ice Level</label>
+            <span class="cust-note" id="iceLabel">Regular Ice</span>
+          </div>
+          <div class="pills-grid" id="iceOptions">
+            <button type="button" class="opt-pill" data-ice="No Ice">No Ice</button>
+            <button type="button" class="opt-pill" data-ice="Less Ice">Less Ice</button>
+            <button type="button" class="opt-pill active" data-ice="Regular Ice">Regular Ice</button>
+            <button type="button" class="opt-pill" data-ice="Extra Ice">Extra Ice</button>
+          </div>
+        </div>
+
+        <!-- 5. Add-ons & Cold Foam -->
+        <div class="cust-section">
+          <div class="cust-header-row">
+            <label class="cust-title">Cold Foam &amp; Add-ons</label>
+            <span class="cust-note">Optional additions</span>
+          </div>
+          <div class="addons-list">
+            <label class="addon-check-card">
+              <input type="checkbox" name="addon" value="Salted Caramel Foam" data-price="35" checked>
+              <div class="addon-info">
+                <strong class="addon-title">Salted Caramel Cold Foam</strong>
+                <span class="addon-desc">Slow-whipped velvety cold foam infused with sea salt</span>
+              </div>
+              <span class="addon-cost">+₱35</span>
+            </label>
+
+            <label class="addon-check-card">
+              <input type="checkbox" name="addon" value="Extra Espresso Shot" data-price="45">
+              <div class="addon-info">
+                <strong class="addon-title">Extra Double Espresso Shot</strong>
+                <span class="addon-desc">Single-origin Sagada Arabica extraction (+80mg caffeine)</span>
+              </div>
+              <span class="addon-cost">+₱45</span>
+            </label>
+
+            <label class="addon-check-card">
+              <input type="checkbox" name="addon" value="Honey Brown Boba" data-price="30">
+              <div class="addon-info">
+                <strong class="addon-title">Honey Brown Sugar Boba</strong>
+                <span class="addon-desc">Fresh chewy pearls simmered in wild honey</span>
+              </div>
+              <span class="addon-cost">+₱30</span>
+            </label>
+          </div>
+        </div>
+
+        <!-- Barista Note -->
+        <div class="cust-section">
+          <label class="cust-title" for="specialNotes">Special Request for Barista</label>
+          <input type="text" id="specialNotes" class="cust-input" placeholder="e.g. Extra hot, separate ice cup...">
+        </div>
+
+      </div>
+
+      <!-- Modal Footer -->
+      <div class="modal-footer">
+        <div class="stepper-box">
+          <button type="button" class="step-btn" id="btnQtyMinus" aria-label="Decrease">&minus;</button>
+          <span class="step-num" id="custQtyValue">1</span>
+          <button type="button" class="step-btn" id="btnQtyPlus" aria-label="Increase">&plus;</button>
+        </div>
+
+        <button type="button" class="btn-confirm-add" id="btnConfirmAddToCart">
+          <span>Add to Order Tray</span>
+          <strong id="custModalTotalPrice">₱270.00</strong>
+        </button>
+      </div>
+
+    </div>
+  </div>
+
+
+  <!-- ================= DESIGN REPORT MODAL (300-500 Word Activity Submission) ================= -->
+  <div class="report-modal-overlay" id="reportModalOverlay" aria-hidden="true">
+    <div class="report-modal-dialog">
+      <div class="report-header">
+        <div>
+          <span class="report-badge">LABORATORY ACTIVITY SUBMISSION</span>
+          <h2 class="report-heading">Design Choices &amp; UX Challenges Report</h2>
+          <div class="report-meta">Word Count: ~440 words &bull; Currency: Philippine Pesos (₱) &bull; Mobile-First + PC Architecture</div>
+        </div>
+        <button class="report-close-x" id="btnCloseReport" aria-label="Close modal">
+          <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><line x1="18" y1="6" x2="6" y2="18"/><line x1="6" y1="6" x2="18" y2="18"/></svg>
+        </button>
+      </div>
+
+      <div class="report-body">
+        <article class="report-article">
+          <h3>1. Chosen Key User Flow: Artisanal Beverage Ordering</h3>
+          <p>
+            The prototype models the quintessential user journey for an artisanal coffee roastery (<strong>"Velvet &amp; Bean"</strong>). The flow progresses smoothly through four cohesive milestones: <em>Menu Discovery</em> &rarr; <em>Beverage Customization</em> &rarr; <em>Cart Review &amp; Checkout</em> &rarr; <em>Live Order Tracking</em>. This sequence captures all primary touchpoints, balancing rich visual appeal with frictionless transactional utility.
+          </p>
+
+          <h3>2. Design Choices: Typography, Color Palette &amp; Visual Hierarchy</h3>
+          <p>
+            To evoke the warmth and craft of an upscale cafe, the color scheme employs deep espresso charcoal (<code>#1A110B</code>), roasted bronze accents (<code>#D97736</code>), and creamy oat-milk background layers (<code>#FAF7F2</code>). Accents in fresh sage green (<code>#3F8A58</code>) provide intuitive cues for positive system statuses. All pricing is standardized in Philippine Pesos (<code>₱</code>) to align with local market ergonomics.
+          </p>
+          <p>
+            Typography pairs <strong>Outfit</strong> for bold display titles and numerical pricing with <strong>Plus Jakarta Sans</strong> for clean, legible micro-controls. Visual hierarchy is established through distinct typographic scaling, high-contrast badges (e.g., "Best Seller"), and an 8-point spatial layout ensuring minimum 44px touch targets.
+          </p>
+
+          <h3>3. Responsive Architecture: Mobile-First &amp; Desktop PC View</h3>
+          <p>
+            The application follows an uncompromising <strong>mobile-first responsive architecture</strong>:
+          </p>
+          <ul>
+            <li><strong>Mobile Viewport:</strong> Features single-column touch navigation, native bottom sheet customizer drawer, floating order tray, and thumb-accessible bottom tabs.</li>
+            <li><strong>Desktop PC View:</strong> Expands naturally into an expansive multi-column desktop storefront with a persistent 2-column layout (wide menu grid alongside a sticky live order summary sidebar), desktop top header, and centered dialog modals.</li>
+          </ul>
+
+          <h3>4. Interactive Transitions &amp; Micro-Animations</h3>
+          <p>
+            The prototype incorporates four distinct animations that elevate perceived performance:
+          </p>
+          <ul>
+            <li><strong>Bottom-Sheet &amp; Modal Spring Easing:</strong> Opening the customizer utilizes a fluid cubic-bezier curve (<code>cubic-bezier(0.16, 1, 0.3, 1)</code>) with contextual backdrop blur.</li>
+            <li><strong>Spatial Screen Transitions:</strong> Smooth page shifts maintain cognitive orientation between Menu, Checkout, and Live Tracker.</li>
+            <li><strong>Brewing Radar &amp; Live Timeline:</strong> Pulsing concentric radar waves and an animated timeline milestone bar visually reassure customers as their drink is prepared.</li>
+            <li><strong>Dynamic Price Recalculation:</strong> Cup size, milk, and add-on modifiers calculate totals live in Philippine Pesos with tactile button feedback.</li>
+          </ul>
+
+          <h3>5. Design Challenges &amp; Solutions Overcome</h3>
+          <p>
+            A major challenge was mitigating cognitive fatigue during beverage customization. Specialty coffee presents numerous interdependent variables (size, milk alternatives, sugar %, ice, toppings). This was solved using segmented chips with transparent upfront pricing (e.g., <code>+₱30</code>) and live total recalculation. Another challenge was preventing post-checkout anxiety; implementing a real-time milestone tracker with animated brewing indicators provides psychological reassurance and trust.
+          </p>
+        </article>
+      </div>
+
+      <div class="report-footer">
+        <button class="report-copy-action" id="btnCopyReport">
+          <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="9" y="9" width="13" height="13" rx="2" ry="2"/><path d="M5 15H4a2 2 0 0 1-2-2V4a2 2 0 0 1 2-2h9a2 2 0 0 1 2 2v1"/></svg>
+          <span id="copyReportBtnText">Copy Report to Clipboard</span>
+        </button>
+        <button class="report-close-action" id="btnCloseReportBottom">Close Window</button>
+      </div>
+    </div>
+  </div>
+
+  <!-- Mobile Floating Cart Bar (Visible on mobile viewports) -->
+  <div class="mobile-floating-cart" id="floatingCartBar">
+    <div class="cart-pill-left">
+      <div class="cart-pill-count" id="cartItemCount">1</div>
+      <div class="cart-pill-meta">
+        <span class="cart-pill-title">Your Tray</span>
+        <span class="cart-pill-desc" id="cartBarPreview">Iced Caramel Macchiato</span>
+      </div>
+    </div>
+    <div class="cart-pill-right">
+      <span class="cart-pill-price" id="cartBarTotal">₱270.00</span>
+      <button class="cart-pill-action" id="btnGoToCheckout">
+        Checkout &rarr;
+      </button>
+    </div>
+  </div>
+
+  <!-- Mobile Bottom Navigation Bar (Sticky at bottom of screen) -->
+  <nav class="mobile-bottom-nav" id="mobileBottomNav">
+    <button class="mobile-nav-tab active" id="mobNavMenu">
+      <svg width="22" height="22" viewBox="0 0 24 24" fill="currentColor"><path d="M12 2.09l9 7.62v11.29a1 1 0 0 1-1 1h-5v-6h-6v6H4a1 1 0 0 1-1-1V9.71l9-7.62z"/></svg>
+      <span>Menu</span>
+    </button>
+    <button class="mobile-nav-tab" id="mobNavFavorites">
+      <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M20.84 4.61a5.5 5.5 0 0 0-7.78 0L12 5.67l-1.06-1.06a5.5 5.5 0 0 0-7.78 7.78l1.06 1.06L12 21.23l7.78-7.78 1.06-1.06a5.5 5.5 0 0 0 0-7.78z"/></svg>
+      <span>Favorites</span>
+    </button>
+    <button class="mobile-nav-tab" id="mobNavOrders">
+      <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M6 2L3 6v14a2 2 0 0 0 2 2h14a2 2 0 0 0 2-2V6l-3-4z"/><line x1="3" y1="6" x2="21" y2="6"/><path d="M16 10a4 4 0 0 1-8 0"/></svg>
+      <span>Checkout</span>
+    </button>
+    <button class="mobile-nav-tab" id="mobNavTracker">
+      <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="10"/><polyline points="12 6 12 12 16 14"/></svg>
+      <span>Tracker</span>
+    </button>
+  </nav>
+
+  <!-- Global Toast Notification -->
+  <div class="toast-popup" id="toastNotification" role="alert">
+    <div class="toast-check">✓</div>
+    <div class="toast-text" id="toastMessage">Item added to tray!</div>
+  </div>
+
+  <script src="app.js"></script>
+</body>
+</html>
